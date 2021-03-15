@@ -1,0 +1,104 @@
+/**
+ * @author doctorbhatti
+ * @email dochassan12@outlook.com
+ * @create date 2021-03-15 01:14:42
+ * @modify date 2021-03-15 01:14:43
+ * @desc [description]
+ */
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 20px;
+  font: 100% sans-serif;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  padding: 20px;
+  margin: 0 0 20px 0;
+}
+
+.bar>* {
+  margin: 0 10px;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  background: #ccc;
+  border-radius: 50%;
+  padding-top: 8px;
+  text-align: center;
+}
+
+.search {
+  flex: 1;
+}
+
+.search input {
+  width: 100%;
+}
+
+.bar-2 .username {
+  order: 2;
+}
+
+.bar-2 .icon-3 {
+  order: 3;
+}
+
+.bar-3 .search {
+  order: -1;
+}
+
+.bar-3 .username {
+  order: 1;
+}
+
+.no-flexbox .bar {
+  display: table;
+  border-spacing: 15px;
+  padding: 0;
+}
+
+.no-flexbox .bar>* {
+  display: table-cell;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.no-flexbox .username {
+  width: 1px;
+}
+
+@media (max-width: 650px) {
+  .bar {
+    flex-wrap: wrap;
+  }
+
+  .icon {
+    order: 0 !important;
+  }
+
+  .username {
+    order: 1 !important;
+    width: 100%;
+    margin: 15px;
+  }
+
+  .search {
+    order: 2 !important;
+    width: 100%;
+  }
+}

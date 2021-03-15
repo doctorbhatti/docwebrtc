@@ -1,0 +1,41 @@
+{
+  "name": "docwebrtc",
+  "version": "0.0.1-rc",
+  "description": "A conference call implementation using WebRTC, Socket.io and Node.js.",
+  "main": "src/app.js",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "node-os-utils": "^1.3.5",
+    "serve-favicon": "^2.5.0",
+    "socket.io": "^2.4.0"
+  },
+  "scripts": {
+    "watch": "nodemon --watch \"src/\" --exec \"node src/app.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.heroku.com/docwebrtc.git"
+  },
+  "keywords": [
+    "nodejs",
+    "webrtc"
+  ],
+  "author": "Muhammad Hassan Ashfaq <dochassan12@outlook.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://git.heroku.com/docwebrtc.git"
+  },
+  "standard": {
+    "ignore": [
+      "/src/assets/js/DetectRTC.js",
+      "/src/assets/js/html2canvas.js"
+    ]
+  },
+  "homepage": "https://docwebrtc.herokuapp.com/",
+  "devDependencies": {
+    "getstats": "^1.2.0"
+  }
+}

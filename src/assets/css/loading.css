@@ -1,0 +1,42 @@
+/**
+ * @author doctorbhatti
+ * @email dochassan12@outlook.com
+ * @create date 2021-03-15 01:15:36
+ * @modify date 2021-03-15 01:15:37
+ * @desc [description]
+ */
+.progress {
+  background: #000000 !important;
+  justify-content: flex-start;
+  border-radius: 100px !important;
+  align-items: center;
+  position: relative;
+  padding: 0px;
+  display: flex;
+  height: auto !important;
+  width: 75%;
+  margin-top: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+}
+
+.progress-value {
+  animation: load 3.8s normal forwards;
+  animation-delay: 3.5s;
+  box-shadow: 0 10px 40px -10px #fff;
+  border-radius: 100px !important;
+  background: #fff;
+  height: 30px;
+  width: 0;
+}
+
+@keyframes load {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+  }
+}

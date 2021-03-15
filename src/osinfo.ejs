@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+@author doctorbhatti
+@email dochassan12@outlook.com
+@create date 2021-03-15 01:17:45
+@modify date 2021-03-15 01:17:46
+@desc [description]
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>doc's WebRTC | OS Stats</title>
+    <link rel="stylesheet" href="assets/css/osinfo.css">
+    
+    <link rel="stylesheet" href="assets/css/app.css">
+    <link rel="icon" type="image/svg" href="./imgs/resources.svg">
+    <link rel="stylesheet" href="assets/css/dark.css" />
+    <!-- END INSERTION -->
+    <!--eruda-->
+    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <script>
+      eruda.init();
+    </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src=" https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css" rel="stylesheet"/></head>
+
+<body>
+    <!-- BEGIN INSERTION -->
+    <script src="assets/js/theme.js"></script>
+    <script>
+        const themeConfig = new ThemeConfig();
+        themeConfig.initTheme();
+    </script>
+    <!-- END INSERTION -->
+    <div class="content">
+        
+        <h1>OS Resurces Monitor</h1>
+        <div class="user">Hello</div>
+        <div class="os">OS Type</div>
+        <!-- CPU  -->
+        <label class="cpu-label" for="cpu">CPU 0%</label>
+        <progress class="cpu-bar" id="cpu" value="10" min='0' max='100'></progress>
+        <!-- RAM  -->
+        <label class="ram-label" for="ram">RAM 0%</label>
+        <progress class="ram-bar" id="ram" value="10" min='0' max='100'></progress>
+         <div class="fixed-action-btn toolbar">
+              <a class="btn-floating btn-large yellow" style="background-color: #F5D300 !important;">
+                <i class="large material-icons">menu</i>
+              </a>
+                <ul>
+                  <li class="waves-effect waves-light"><a href="/"><i class="material-icons">home</i></a></li>
+                  <li class="waves-effect waves-light"><a href="/osinfo"><i class="material-icons">eco</i></a></li>
+                  <li class="waves-effect waves-light"><a href="/stats"><i class="material-icons">query_stats</i></a></li>
+                  <li class="waves-effect waves-light"><a href="/dotect"><i class="material-icons">fact_check</i></a></li>
+                  <li class="waves-effect waves-light"><a href="/about"><i class="material-icons">info</i></a></li>
+                </ul>
+              </div>
+              <script>
+                        writeDarkSwitch(themeConfig);
+                      </script>
+
+    </div>
+          <footer><br>with 💙 @doctorbhatti</footer>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.fixed-action-btn');
+      var instances = M.FloatingActionButton.init(elems, {
+        toolbarEnabled: true
+      });
+    });
+  
+      </script>
+
+    <!-- SOCKET IO  -->
+    <!--DarkTheme-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js"></script>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="assets/js/osinfo.js" defer></script>
+</body>
+
+</html>

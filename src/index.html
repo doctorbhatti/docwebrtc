@@ -1,0 +1,440 @@
+<!--
+  @author doctorbhatti
+  @email dochassan12@outlook.com
+  @create date 2021-03-15 01:17:45
+  @modify date 2021-03-15 20:40:31
+  @desc [description]
+  -->
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+      <title>doc's WebRTC | Home</title>
+      <meta name="author" content="Muhammad Hassan Ashfaq" />
+      <style>
+        /*
+        Force full width & height.
+        If this block is removed, the layout height/length will be determined by
+        the amount of content in the page. That might result in a page which has
+        a footer only a few inches from the top of the viewport, or one which
+        scrolls beyond the viewport.
+        This forces the layout to always be full screen regardless of how much,
+        or how little, content is in place. Neither is "right" or "wrong", there
+        are valid cases for each. I just want to be clear what's controlling the
+        page/viewport height.
+        */
+        html,
+        body,
+        .viewport {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        }
+        .flex-container {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        }
+        .top-item {
+        flex: 1 0 100%;
+        text-align: center;
+        align-self: flex-start;
+        position: absolute;
+        /* ADDED */
+        }
+        .flex-item {
+        text-align: center;
+        margin: auto;
+        }
+        .flexbox-containermain {
+        display: flex;
+        background: green;
+        justify-content: center;
+        height: 100%;
+        align-content: center;
+        /* ADDED */
+        /* ADDED */
+        }
+        .button-hov {
+        transition-duration: 0.4s;
+        }
+        .button-hov:hover {
+        background-color: #F5D300;
+        /* Green */
+        color: white;
+        }
+      </style>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <link rel='stylesheet' href='assets/css/app.css' type="text/css">
+      <script src='/socket.io/socket.io.js'></script>
+      <script type="module" src='assets/js/rtc.js'></script>
+      <script type="module" src='assets/js/events.js'></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/7.3.0/adapter.min.js" integrity="sha256-2qQheewaqnZlXJ3RJRghVUwD/3fD9HNqxh4C+zvgmF4=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js'></script>
+      <script src='https://cdn.rawgit.com/yahoo/xss-filters/master/dist/xss-filters.js'></script>
+      <script src='assets/js/autolink.js'></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="assets/css/splash.css" />
+      <!-- BEGIN INSERTION -->
+      <link rel="stylesheet" href="assets/css/dark.css" />
+      <!-- END INSERTION -->
+      <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+      <!--eruda-->
+      <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+      <script>
+        eruda.init();
+      </script>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+      <link rel="stylesheet" href="assets/css/loading.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <script src=" https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css" rel="stylesheet"/>
+      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+      <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.min.css'>
+      <link rel="stylesheet" href="assets/css/chat.css">
+    </head>
+    <body>
+      <!-- BEGIN INSERTION -->
+      <script src="assets/js/theme.js"></script>
+      <script>
+        const themeConfig = new ThemeConfig();
+        themeConfig.initTheme();
+      </script>
+      <!-- END INSERTION -->
+      <!--Your Main contents-->
+      <div id="main" class="flexbox-container">
+        <div class="flex-containermain">
+          <div class="custom-modal" id='recording-options-modal'>
+            <div class="custom-modal-content">
+              <div class="row text-center">
+                <div class="col-md-6 mb-2">
+                  <span class="record-option" id='record-video'>Record video</span>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <span class="record-option" id='record-screen'>Record screen</span>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-12 text-center">
+                  <button class="btn btn-outline-danger" id='closeModal'>Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="main">
+            <div class="container-fluid" id='room-create' hidden>
+              <div class="row">
+                <div class="col-12 h2 mt-5 text-center">Create Room</div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-12 text-center">
+                  <span class="form-text small text-danger" id='err-msg'></span>
+                </div>
+                <div class="col-12 col-md-4 offset-md-4 mb-3">
+                  <label for="room-name">Room Name</label>
+                  <input type="text" id='room-name' class="form-control rounded-0" placeholder="Room Name">
+                </div>
+                <div class="col-12 col-md-4 offset-md-4 mb-3">
+                  <label for="your-name">Your Name</label>
+                  <input type="text" id='your-name' class="form-control rounded-0" placeholder="Your Name">
+                </div>
+                <div class="col-12 col-md-4 offset-md-4 mb-3">
+                  <button id='create-room' class="btn button-hov btn-block rounded-0">Create Room</button>
+                </div>
+                <div class="col-12 col-md-4 offset-md-4 mb-3" id='room-created'></div>
+              </div>
+            </div>
+            <div class="container-fluid" id='username-set' hidden>
+              <div class="row">
+                <div class="col-12 h4 mt-5 text-center">Your Name</div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-12 text-center">
+                  <span class="form-text small text-danger" id='err-msg-username'></span>
+                </div>
+                <div class="col-12 col-md-4 offset-md-4 mb-3">
+                  <label for="username">Your Name</label>
+                  <input type="text" id='username' class="form-control rounded-0" placeholder="Your Name">
+                </div>
+                <div class="col-12 col-md-4 offset-md-4 mb-3">
+                  <button id='enter-room' class="btn btn-outline-warning btn-block rounded-0">Enter Room</button>
+                </div>
+              </div>
+            </div>
+            <div class="container-fluid room-comm" hidden>
+              <div class="row" id="roomIntro">
+                <div class="col-12 h2 mt-5 text-align">Welcome to docWbeRTC, a platform built<br  >to provide cheap and continous video<br  >conferencing solution.</div>
+                <div class="col-12 h6 mt-5 text-center">This is the main page of your conference<br  >new incoming participants' video<br  >will show up here.</div>
+                <div class="col-12 h6 mt-5 text-center">To avail options, please press <a href="#" style="color:orangered;">Orange Button</a><br  >in bottom right corner.</div>
+                <div class="col-12 h6 mt-5 text-center" style="margin-top: 10% !important;">with 💙 @doctorbhatti</div>            
+              </div>
+              <!--container-->
+              <div class="row">
+                <video class="local-video mirror-mode" id='local' volume='0' autoplay muted></video>
+                
+              </div>
+              <div class="row">
+                <div class="col-md-12 main" id='main-section'>
+                  <div class="row mt-2 mb-2" id='videos'></div>
+                </div>
+                <!-- Chat Panel -->
+               
+                <div class="col-md-3 chat-col d-print-none mb-2" id='chat-pane' hidden>
+                <section class="avenue-messenger" style="position: relative">
+                  <!--Below div menu has been left intentionally open because right now, cant find a way to keep layout aligned-->
+                  <div class="menu" id="minimizeChat" </div>
+                    <div class="button"id="minimizeChat">x</div>
+                  </div>
+                  <div class="chat">
+                    <div class="chat-title">
+                      <h1><strong>Chat Portal docWebRTC</strong></h1>
+                      <h2 style="color: #4B0082">Due to security reasons, message can only be sent by pressing "ENTER ↩" key twice after typing the message.</h2>
+                      <!--  <figure class="avatar">
+                        <img src="http://askavenue.com/img/17.jpg" /></figure>-->
+                    </div>
+                    <div class="messages" id='chat-messages'>
+                      <div class="messages-content"></div>
+                    </div>
+                    <div class="message-box mybox">
+                      <textarea id='chat-input' type="text" style="overflow: hidden;" class="message-input" placeholder="Type message...">
+                        
+                      </textarea>
+               
+                    </div>
+                  </div>
+              </div>
+              <!--<div class="bg"></div>-->
+              <!-- partial -->
+            </section>
+            </div>
+            
+          </div>
+          <div class="mdl-sheet__container" id="roomFab" style="visibility: hidden;">
+            <div class="mdl-sheet mdl-shado--0dp" style="background-color: in">
+              <i class="material-icons mdl-sheet__icon">add</i>
+              <div class="mdl-sheet__content">
+                <div class="mdl-list">
+                  <div class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content" id="toggle-video" >
+                    <i class="material-icons">videocam_off</i>
+                    <span>Toggle/Hide Video</span>
+                    </span>
+                  </div>
+                  <hr class="solid">
+                  <div class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content" id="toggle-mute">
+                    <i class="material-icons">mic_off</i>
+                    <span>Mute/Unmute Mic</span>
+                    </span>
+                  </div>
+                  <hr class="solid">
+                  <div class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content" id="share-screen">
+                    <i class="material-icons mdl-list__item-avatar">smart_screen</i>
+                    <span>Share Screen (PC)</span>
+                    </span>
+                  </div>
+                  <hr class="solid">
+                  <div class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content" id="record">
+                    <i class="material-icons">fiber_smart_record</i>
+                    <span>Record Session</span>
+                    </span>
+                  </div>
+                  <hr class="solid">
+                  <div class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content" id="toggle-chat-pane">
+                    <i class="material-icons">chat_bubble</i>
+                    <span class="badge badge-danger very-small font-weight-lighter" id='new-chat-notification' hidden>New</span>
+                    <span>Chat</span>
+                    </span>
+                    <!--TODO Adjust chat panel-->
+                  </div>
+                  <hr class="solid">
+                  <div class="mdl-list__item">
+                    <script>
+                      writeDarkSwitch(themeConfig);
+                    </script>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fixed-action-btn toolbar room-dom">
+            <a class="btn-floating btn-large yellow" id="mainFab" style="background-color: #F5D300 !important;">
+            <i class="large material-icons">menu</i>
+            </a>
+            <ul>
+              <li class="waves-effect waves-light"><a href="/"><i class="material-icons">home</i></a></li>
+              <li class="waves-effect waves-light"><a href="/osinfo"><i class="material-icons">eco</i></a></li>
+              <li class="waves-effect waves-light"><a href="/stats"><i class="material-icons">query_stats</i></a></li>
+              <li class="waves-effect waves-light"><a href="/dotect"><i class="material-icons">fact_check</i></a></li> 
+              <li class="waves-effect waves-light"><a href="/about"><i class="material-icons">info</i></a></li>
+              <li class="waves-effect waves-light"><a href="/chat"><i class="material-icons">info</i></a></li>
+            </ul>
+          </div>
+          
+           
+        </div>
+      </div>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.fixed-action-btn');
+        var instances = M.FloatingActionButton.init(elems, {
+          toolbarEnabled: true
+        });
+        });
+        var $sheet = $('.mdl-sheet');
+        
+        if($sheet.length > 0) {
+        $('html').on('click', function() {
+        $sheet.removeClass('mdl-sheet--opened')  
+        });
+        
+        $sheet.on('click', function(event) {
+        event.stopPropagation();
+        
+        $sheet.addClass('mdl-sheet--opened');
+        });
+        }
+        var minimizeChatPane = document.getElementById('minimizeChat');
+        minimizeChatPane.onclick = function(){
+          
+    const chatElem = document.querySelector('#chat-pane')
+    const mainSecElem = document.querySelector('#main-section')
+
+    if (chatElem.classList.contains('chat-opened')) {
+      chatElem.setAttribute('hidden', true)
+      mainSecElem.classList.remove('col-md-9')
+      mainSecElem.classList.add('col-md-12')
+      chatElem.classList.remove('chat-opened')
+    } else {
+      chatElem.attributes.removeNamedItem('hidden')
+      mainSecElem.classList.remove('col-md-12')
+      mainSecElem.classList.add('col-md-9')
+      chatElem.classList.add('chat-opened')
+            }
+            
+          }
+        
+        
+      </script>
+      <!--Your Splascreen-->
+      <div id="splash" class="flex-container" style="background: #E91E63 ; display: none">
+        <!--Center align Splash contents in all screen sizes-->
+        <div class="flex-item">
+          <!-- partial:index.partial.html -->
+          <div class="splash">
+            <div class="splash_logo">
+              doc'sWebRTC
+            </div>
+            <div class="splash_svg">
+              <svg width="100%" height="100%">
+                <rect width="100%" height="100%">
+              </svg>
+            </div>
+            <div class="splash_minimize">
+              <svg width="100%" height="100%">
+                <rect width="100%" height="100%">
+              </svg>
+            </div>
+          </div>
+          <div class="text">
+            <p>Lag & delay free</p>
+            <p>Video conferencing,</p>
+            <p>teams collaboration</p>
+            <p>and much more.</p>
+            <button>by Muhammad Hassan Ashfaq</button>
+            <div class="progress">
+              <div class="progress-value"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--  Scripts-->
+      <script>
+        function fade(element) {
+          var op = 1; // initial opacity
+          var timer = setInterval(function() {
+            if (op <= 0.1) {
+              clearInterval(timer);
+        
+              element.style.display = 'none';
+            }
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            op -= op * 0.1;
+          }, 20);
+        };
+        function unfade(element) {
+        var op = 0.1;  // initial opacity
+        element.style.display = 'block';
+        var timer = setInterval(function () {
+            if (op >= 1){
+                clearInterval(timer);
+            }
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            op += op * 0.1;
+        }, 10);
+        };
+        setTimeout(function() {
+        
+          if (typeof(Storage) !== "undefined") {
+        
+            console.log("Already shown" + sessionStorage.getItem('spalashShown'));
+        
+            if (!sessionStorage.getItem('spalashShown') || sessionStorage.getItem('spalashShown') === null) {
+        
+              document.getElementById('splash').style.display = 'inline';
+              document.getElementById('mainFab').style.display = 'none';
+        
+        
+              //Display splash
+              setTimeout(function() {
+                unfade(document.getElementById('mainFab'));
+                fade(document.getElementById('splash'));
+                // document.getElementById('splash') .style.display = 'none'
+                // window.location = "http://hiteshsahu.com";
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('mainFab').style.display = 'block'
+                sessionStorage.setItem('spalashShown', true);
+              }, 7000);
+        
+            } else {
+        
+              //Display Main Content
+              document.getElementById('splash').style.display = 'none'
+              document.getElementById('mainFab').style.display = 'block'
+              console.log("Already shown");
+            }
+          }
+        
+          else {
+            document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+          }
+        }, 0);
+      </script>
+      <!--DarkTheme-->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js"></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js'>
+      </script><script  src="a/js/chat.js"></script>
+              
+    </body>
+  </html>
