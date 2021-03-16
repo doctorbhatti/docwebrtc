@@ -129,8 +129,9 @@
       display: none;
     }
   </style>
-  <script src="https://www.webrtc-experiment.com/getStats.js"></script>
-  <script src="https://www.webrtc-experiment.com/IceServersHandler.js"></script>
+
+  <script src="../assets/js/getStats.js"></script>
+    <script src="../assets/js/IceServersHandle.js"></script>
   <!-- for Edge/FF/Chrome/Opera/etc. getUserMedia support -->
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
   <script src="//cdn.jsdelivr.net/npm/eruda"></script>
@@ -391,155 +392,157 @@
     <blockquote style="margin: 20px;">
       Multi-user peer-to-peer demo: <a href="https://khanswork.herokuapp.com/demos/getStats.html">getStats using RTCMultiConnection</a>
     </blockquote>
-    <script>
-      var iceTransportPolicy = document.getElementById('select-iceTransportPolicy');
-      if (localStorage.getItem('iceTransportPolicy')) {
-        iceTransportPolicy.value = localStorage.getItem('iceTransportPolicy');
-      }
-      iceTransportPolicy.onchange = function() {
-        localStorage.setItem('iceTransportPolicy', this.value);
-        location.reload();
-      };
+<script>
+                var iceTransportPolicy = document.getElementById('select-iceTransportPolicy');
+                if(localStorage.getItem('iceTransportPolicy')) {
+                    iceTransportPolicy.value = localStorage.getItem('iceTransportPolicy');
+                }
+                iceTransportPolicy.onchange = function() {
+                    localStorage.setItem('iceTransportPolicy', this.value);
+                    location.reload();
+                };
 
-      var iceTransportLimitation = document.getElementById('select-iceTransportLimitation');
-      if (localStorage.getItem('iceTransportLimitation')) {
-        iceTransportLimitation.value = localStorage.getItem('iceTransportLimitation');
-      }
-      iceTransportLimitation.onchange = function() {
-        localStorage.setItem('iceTransportLimitation', this.value);
-        location.reload();
-      };
+                var iceTransportLimitation = document.getElementById('select-iceTransportLimitation');
+                if(localStorage.getItem('iceTransportLimitation')) {
+                    iceTransportLimitation.value = localStorage.getItem('iceTransportLimitation');
+                }
+                iceTransportLimitation.onchange = function() {
+                    localStorage.setItem('iceTransportLimitation', this.value);
+                    location.reload();
+                };
 
-      var codec = document.getElementById('select-codec');
-      if (localStorage.getItem('codec')) {
-        codec.value = localStorage.getItem('codec');
-      }
-      codec.onchange = function() {
-        localStorage.setItem('codec', this.value);
-        location.reload();
-      };
+                var codec = document.getElementById('select-codec');
+                if(localStorage.getItem('codec')) {
+                    codec.value = localStorage.getItem('codec');
+                }
+                codec.onchange = function() {
+                    localStorage.setItem('codec', this.value);
+                    location.reload();
+                };
 
-      function addIceCandidate(peer, candidate) {
-        if (iceTransportLimitation.value === 'tcp') {
-          if (candidate.candidate.toLowerCase().indexOf('tcp') === -1) {
-            return; // ignore UDP
-          }
-        }
+                function addIceCandidate(peer, candidate) {
+                    if(iceTransportLimitation.value === 'tcp') {
+                        if(candidate.candidate.toLowerCase().indexOf('tcp') === -1) {
+                            return; // ignore UDP
+                        }
+                    }
 
-        if (iceTransportLimitation.value === 'udp') {
-          if (candidate.candidate.toLowerCase().indexOf('udp') === -1) {
-            return; // ignore UDP
-          }
-        }
+                    if(iceTransportLimitation.value === 'udp') {
+                        if(candidate.candidate.toLowerCase().indexOf('udp') === -1) {
+                            return; // ignore UDP
+                        }
+                    }
 
-        peer.addIceCandidate(candidate);
-      }
-    </script>
-    <script>
-      var offerer, answerer;
-      var offererToAnswerer = document.getElementById('peer1-to-peer2');
-      var answererToOfferer = document.getElementById('peer2-to-peer1');
+                    peer.addIceCandidate(candidate);
+                }
+            </script>
+            <script>
+                var offerer, answerer;
+                var offererToAnswerer = document.getElementById('peer1-to-peer2');
+                var answererToOfferer = document.getElementById('peer2-to-peer1');
 
-      var iceServers = {
-        iceServers: IceServersHandler.getIceServers(),
-        iceTransportPolicy: iceTransportPolicy.value,
-        rtcpMuxPolicy: 'require',
-        bundlePolicy: 'max-bundle'
-      };
+                var iceServers = {
+                    iceServers: IceServersHandle.getIceServers(),
+                    iceTransportPolicy: iceTransportPolicy.value,
+                    rtcpMuxPolicy: 'require',
+                    bundlePolicy: 'max-bundle'
+                };console.log(iceServers)
+                var mediaConstraints = {
+                    OfferToReceiveAudio: true,
+                    OfferToReceiveVideo: true
+                };
+                
+            </script>
+            <script>
+                /* offerer */
 
-      var mediaConstraints = {
-        OfferToReceiveAudio: true,
-        OfferToReceiveVideo: true
-      };
-    </script>
-    <script>
-      /* offerer */
+                function offererPeer(video_stream) {
+                    offerer = new RTCPeerConnection(iceServers);
+                    offerer.idx = 1;
 
-      function offererPeer(video_stream) {
-        offerer = new RTCPeerConnection(iceServers);
-        offerer.idx = 1;
+                    video_stream.getTracks().forEach(function(track) {
+                        offerer.addTrack(track, video_stream);
+                    });
 
-        video_stream.getTracks().forEach(function(track) {
-          offerer.addTrack(track, video_stream);
-        });
+                    var firedOnce = false;
+                    offerer.ontrack = function (event) {
+                        if(firedOnce) return;
+                        firedOnce = true;
 
-        var firedOnce = false;
-        offerer.ontrack = function(event) {
-          if (firedOnce) return;
-          firedOnce = true;
+                        offererToAnswerer.srcObject = event.streams[0];
 
-          offererToAnswerer.srcObject = event.streams[0];
+                        if(/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                            getStats(offerer, event.streams[0].getTracks()[0], function(result) {
+                                previewGetStatsResult(offerer, result);
+                            }, 1000);
+                            return;
+                        }
 
-          if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-            getStats(offerer, event.streams[0].getTracks()[0], function(result) {
-              previewGetStatsResult(offerer, result);
-            }, 1000);
-            return;
-          }
+                        getStats(offerer, function(result) {
+                            previewGetStatsResult(offerer, result);
+                        }, 1000);
+                    };
 
-          getStats(offerer, function(result) {
-            previewGetStatsResult(offerer, result);
-          }, 1000);
-        };
+                    offerer.onicecandidate = function (event) {
+                        if (!event || !event.candidate) return;
+                        addIceCandidate(answerer, event.candidate);
+                        
+                        
+                    };
 
-        offerer.onicecandidate = function(event) {
-          if (!event || !event.candidate) return;
-          addIceCandidate(answerer, event.candidate);
-        };
+                    offerer.createOffer(mediaConstraints).then(function (offer) {
+                        offer.sdp = preferSelectedCodec(offer.sdp);
+                        offerer.setLocalDescription(offer).then(function() {
+                            answererPeer(offer, video_stream);
+                        });
+                    });
+                }
+            </script>
+            <script>
+                /* answerer */
 
-        offerer.createOffer(mediaConstraints).then(function(offer) {
-          offer.sdp = preferSelectedCodec(offer.sdp);
-          offerer.setLocalDescription(offer).then(function() {
-            answererPeer(offer, video_stream);
-          });
-        });
-      }
-    </script>
-    <script>
-      /* answerer */
+                function answererPeer(offer, video_stream) {
+                    answerer = new RTCPeerConnection(iceServers);
+                    answerer.idx = 2;
+                    
+                    video_stream.getTracks().forEach(function(track) {
+                        answerer.addTrack(track, video_stream);
+                    });
 
-      function answererPeer(offer, video_stream) {
-        answerer = new RTCPeerConnection(iceServers);
-        answerer.idx = 2;
+                    var firedOnce = false;
+                    answerer.ontrack = function (event) {
+                        if(firedOnce) return;
+                        firedOnce = true;
 
-        video_stream.getTracks().forEach(function(track) {
-          answerer.addTrack(track, video_stream);
-        });
+                        answererToOfferer.srcObject = event.streams[0];
 
-        var firedOnce = false;
-        answerer.ontrack = function(event) {
-          if (firedOnce) return;
-          firedOnce = true;
+                        if(/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                            getStats(offerer, event.streams[0].getTracks()[0], function(result) {
+                                previewGetStatsResult(offerer, result);
+                            }, 1000);
+                            return;
+                        }
+                        
+                        getStats(answerer, function(result) {
+                            previewGetStatsResult(answerer, result);
+                        }, 1000);
+                    };
 
-          answererToOfferer.srcObject = event.streams[0];
-
-          if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-            getStats(offerer, event.streams[0].getTracks()[0], function(result) {
-              previewGetStatsResult(offerer, result);
-            }, 1000);
-            return;
-          }
-
-          getStats(answerer, function(result) {
-            previewGetStatsResult(answerer, result);
-          }, 1000);
-        };
-
-        answerer.onicecandidate = function(event) {
-          if (!event || !event.candidate) return;
-          addIceCandidate(offerer, event.candidate);
-        };
-
-        answerer.setRemoteDescription(offer).then(function() {
-          answerer.createAnswer(mediaConstraints).then(function(answer) {
-            answer.sdp = preferSelectedCodec(answer.sdp);
-            answerer.setLocalDescription(answer).then(function() {
-              offerer.setRemoteDescription(answer);
-            });
-          });
-        });
-      }
-    </script>
+                    answerer.onicecandidate = function (event) {
+                        if (!event || !event.candidate) return;
+                        addIceCandidate(offerer, event.candidate);
+                    };
+                    
+                    answerer.setRemoteDescription(offer).then(function() {
+                        answerer.createAnswer(mediaConstraints).then(function (answer) {
+                            answer.sdp = preferSelectedCodec(answer.sdp);
+                            answerer.setLocalDescription(answer).then(function() {
+                                offerer.setRemoteDescription(answer);
+                            });                        
+                        });
+                    });
+                }
+            </script>
     <script>
       var video_constraints = {
         mandatory: {},

@@ -7,7 +7,7 @@
  */
 
 import h from './helpers.js'
-
+import i from './IceServersHandler.js'
 window.addEventListener('load', () => {
   const room = h.getQString(location.href, 'room')
   const username = sessionStorage.getItem('username')
@@ -126,8 +126,8 @@ window.addEventListener('load', () => {
     }
 
     function init (createOffer, partnerName) {
-      pc[partnerName] = new RTCPeerConnection(h.getIceServer())
-
+      pc[partnerName] = new RTCPeerConnection(i.getIceServerAlt())
+      console.log(i.getIceServerAlt())
       if (screen && screen.getTracks().length) {
         screen.getTracks().forEach((track) => {
           pc[partnerName].addTrack(track, screen) // should trigger negotiationneeded event
@@ -223,6 +223,7 @@ window.addEventListener('load', () => {
             break
         }
       }
+      
     }
 
     function shareScreen () {
