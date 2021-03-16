@@ -1,6 +1,6 @@
 {
   "name": "docwebrtc",
-  "version": "0.0.1-rc",
+  "version": "1.0.0",
   "description": "A conference call implementation using WebRTC, Socket.io and Node.js.",
   "main": "src/app.js",
   "dependencies": {
